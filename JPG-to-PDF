@@ -1,0 +1,30 @@
+def picture_to_pdf():
+    from PIL import Image
+    from os import listdir
+    from os.path import isfile, join
+
+    print("Please input the path of the files to be converted")
+    path = input()
+    print("")
+
+    file_list_1 = [f for f in listdir(path) if isfile(join(path, f))]
+
+    file_list_2 = []
+    for i in file_list_1:
+        if ".jpg" in i or ".png" in i:
+            file_list_2.append(i)
+
+    new_names = []
+    for i in file_list_2:
+        new_names.append(i.replace("jpg", "pdf").replace("png", "pdf"))
+
+    counter = 0
+    for (a, b) in zip(new_names, file_list_2):
+        image = Image.open(f"{path}/{b}")
+        image_1 = image.convert("RGB")
+        image_1.save(f"{path}/{a}")
+        counter += 1
+        print(f"File {counter} completed, {len(new_names) - counter} files remaining")
+        
+        if counter == len(new_names):
+            print("Conversion complete")
