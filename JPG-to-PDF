@@ -1,4 +1,4 @@
-def picture_to_pdf():
+def jpg_to_pdf():
     from PIL import Image
     from os import listdir
     from os.path import isfile, join
@@ -8,23 +8,21 @@ def picture_to_pdf():
     print("")
 
     file_list_1 = [f for f in listdir(path) if isfile(join(path, f))]
+    file_list_2 = [i for i in file_list_1 if ".jpg" in i or ".png" in i and "blank" not in i]
 
-    file_list_2 = []
-    for i in file_list_1:
-        if ".jpg" in i or ".png" in i:
-            file_list_2.append(i)
+    new_list = []
+    for a, b in enumerate(file_list_2):
+        if a == 0:
+            image = Image.open(f"{path}/{b}").convert("RGB")
+            print("Image 1 converted")
+        else:
+            new_list.append(Image.open(f"{path}/{b}").convert("RGB"))
+            print(f"Image {a + 1} converted")
+            print("")
 
-    new_names = []
-    for i in file_list_2:
-        new_names.append(i.replace("jpg", "pdf").replace("png", "pdf"))
+    print("Please input the name of the file to be saved")
+    file_name = input()
 
-    counter = 0
-    for (a, b) in zip(new_names, file_list_2):
-        image = Image.open(f"{path}/{b}")
-        image_1 = image.convert("RGB")
-        image_1.save(f"{path}/{a}")
-        counter += 1
-        print(f"File {counter} completed, {len(new_names) - counter} files remaining")
-        
-        if counter == len(new_names):
-            print("Conversion complete")
+    image.save(f"{path}/{file_name}.pdf", save_all = True, append_images = new_list)
+    print("")
+    print("Conversion complete")
